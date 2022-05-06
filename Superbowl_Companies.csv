@@ -1,0 +1,20 @@
+Product Type,Company,2015,2016,2017,2018,2019,2020,2021,2022
+Beer,Budweiser,Yes,no,yes,yes,yes,no,no,yes
+Beer,Bud Light,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
+candy,Mar Inc.,Yes,Yes,Yes,Yes,Yes,No,Yes,No
+car,Jeep,Yes,Yes,No,Yes,No,Yes,Yes,No
+car,Toyato,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes
+food,Doritos,Yes,Yes,No,Yes,Yes,Yes,No,Yes
+food,Avocado from Mexico ,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes
+food,pringles,No,no,no,Yes,Yes,No,no,No
+soft drink,Pepsi/ Mountain Dew,Yes,Yes,No,Yes,Yes,Yes,No,Yes
+soft drink,Coca-Cola,Yes,Yes,Yes,Yes,Yes,Yes,No ,No
+phone,T-Mobile,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes
+phone,sprint,Yes,no,Yes,yes,No,No,no,No
+laundry,Tide,No,No ,Yes,Yes,No,Yes,Yes,No
+Car accessories,weather tech,yes,yes,No,Yes,No,No,Yes,yes
+software,turbotax,yes,no,Yes,Yes,no,No,no,yes
+website,wix.com,yes,no,Yes,Yes,no,No,no,No
+website,squarespace,yes,no,Yes,Yes,no,no,Yes,yes
+technology,amazon alexa,No,no,No,Yes,Yes,no,no,No
+delivery,uber eat,No,no,No,no,no,no,yes,yes
