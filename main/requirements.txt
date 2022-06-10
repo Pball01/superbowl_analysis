@@ -1,0 +1,7 @@
+pandas
+datetime
+glob
+os
+numpy
+re
+vaderSentiment
