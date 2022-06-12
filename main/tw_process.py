@@ -1,17 +1,10 @@
 import pandas as pd
-import snscrape.modules.twitter as sntwitter
-from datetime import datetime
-from datetime import timedelta
 import glob
 import os
-import numpy as np
-import re
 import pickle
-#import spacy
-#import nltk
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-#import ssl
 
+OUT_PATH = 'preprocessed/twitter.csv'
 
 #uploading company name, use companies_test for shorter data, use companies for all data
 with open('companies_test.pkl', 'rb') as f:
@@ -23,23 +16,25 @@ if not os.path.exists("preprocessed"):
     os.makedirs("preprocessed")
 
 
-
 sid = SentimentIntensityAnalyzer()
 
-#joining files
-def prep_concat(filenames):
-    for files in filenames:
-        for file in files:
-            df = pd.read_csv(file, lineterminator='\n')
-            directory = file.partition("/")[2].partition("/")[0]
-            company_name = file.partition("_")[2].partition(".")[0]
-            df['Company_Name'] = company_name
-            df['Directory'] = directory
-            df = df.reset_index(drop=True)
-            yield df
+
+#  Read each csv into a data frame and return it
+def get_dfs(list_of_csv_paths):
+    for path in list_of_csv_paths:
+        # Identify the brand and directory from the file path name (ex: raw_data/after/uber eats.csv)
+        _, brand = path.split('/')[-1][:-4].split('_')
+        directory = path.split('/')[1]
+        # Convert the csv into a data frame
+        df = pd.read_csv(path, lineterminator='\n')
+        # add the brand and directory columns to the data frame
+        df['brand'] = brand
+        df['directory'] = directory
+        df = df.reset_index(drop=True)
+        yield df
 
 
-
+# calculate the sentiment for each tweet
 def calculate_sentiments(df):
     df['scores'] = df['Text'].apply(lambda Text: sid.polarity_scores(Text))
     df['compound']  = df['scores'].apply(lambda score_dict: score_dict['compound'])
@@ -50,29 +45,29 @@ def calculate_sentiments(df):
     return df
 
 
-
-
-#list of filenames
-filenames_before = sorted(glob.glob(f'raw_data/before/*{company}.csv') for company in companies)
-filenames_after = sorted(glob.glob(f'raw_data/after/*{company}.csv') for company in companies)
-filenames_after_superbowl = sorted(glob.glob(f'raw_data/after/superbowl/*{company}.csv') for company in companies)
-
-
-
-
+# add a column for if the tweet contains the word "superbowl"
+def check_superbowl_keyword(df):
+    df['contains_superbowl'] = df['Text'].apply(lambda x: 'superbowl' in x.lower())
+    return df
 
 
 if __name__ == '__main__':
-    #creating bigger files
-    before_df = pd.concat((prep_concat(filenames_before))).reset_index(drop=True)
-    after_df = pd.concat((prep_concat(filenames_after))).reset_index(drop=True)
-    after_superbowl_df = pd.concat((prep_concat(filenames_after_superbowl))).reset_index(drop=True)
 
-    #calculate sentiments
-    before_df = calculate_sentiments(before_df)
-    after_df = calculate_sentiments(after_df)
-    after_superbowl_df = calculate_sentiments(after_superbowl_df)
+    dir_list = []
+    for timeframe in ['before', 'after']:
+        for path in glob.glob(f'raw_data/{timeframe}/*.csv'):
+            dir_list.append(path)
 
-    before_df.to_csv(r'preprocessed/before_df.csv')
-    after_df.to_csv(r'preprocessed/after_df.csv')
-    after_superbowl_df.to_csv(r'preprocessed/after_superbowl_df.csv')
+    if os.path.exists(OUT_PATH):
+        os.remove(OUT_PATH)
+    
+
+    for df in get_dfs(dir_list):
+        # process individual dataframe
+        df = calculate_sentiments(df)
+        #  determine if superbowl keyword is included
+        df = check_superbowl_keyword(df)
+        # write processed dataframe to output file
+        mode, header = ('w', True) if not os.path.exists(OUT_PATH) else ('a', False)
+        with open(OUT_PATH, mode) as f:
+            df.to_csv(f, header=header, index=False)
