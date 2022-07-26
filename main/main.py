@@ -27,14 +27,14 @@ if __name__ == "__main__":
 
 
 def Pipeline():
-    # pull_stock_data()  # pull stock data
-    # preprocess_stock()  # preprocess stock
+    pull_stock_data()  # pull stock data
+    preprocess_stock()  # preprocess stock
 
-    # pull_google_trends()  # preprocess google trends
+    pull_google_trends()  # preprocess google trends
 
-    # create_raw_folders()  # create new folder for Twitter
-    # pull_twitter_data()  # pull twitter data
-    # preprocess_twitter()  # preprocess twitter
+    create_raw_folders()  # create new folder for Twitter
+    pull_twitter_data()  # pull twitter data
+    preprocess_twitter()  # preprocess twitter
 
     data_tables()  # creating tables for redshift
     copy_data()  # copy data from s3 to redshift
