@@ -1,7 +1,9 @@
 pandas
-datetime
-glob
-os
 numpy
-re
-vaderSentiment
+snscrape==0.4.3.20220106
+vaderSentiment==3.3.2
+tqdm
+yfinance==0.1.74
+pytrends==4.8.0
+pandas_datareader
+boto3

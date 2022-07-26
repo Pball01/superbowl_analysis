@@ -1,23 +1,20 @@
-import pandas as pd
-import snscrape.modules.twitter as sntwitter
-from datetime import datetime
-from datetime import timedelta
-import glob
+#!/home/ec2-user/my_app/env/bin/python
+
+import json
 import os
-import numpy as np
-import re
-import pickle
-from tw_func import get_brand_tweets_in_year_after, get_brand_tweets_in_year_after_sb, get_brand_tweets_in_year_before
 
+from tqdm import tqdm
 
-#uploading company name, use companies_test for shorter data, use companies for all data
-with open('companies_test.pkl', 'rb') as f:
-    brands = pickle.load(f)
+from tw_func import get_brand_tweets_in_year_after, get_brand_tweets_in_year_before
+
+# uploading company name, use companies_test for shorter data, use companies for all data
+with open("companies_test.json", "r") as f:
+    brands = json.load(f)
 
 
 
 def create_raw_folders():
-#creating folder
+    # creating folder
     if not os.path.exists("raw_data"):
         os.makedirs("raw_data")
 
@@ -27,33 +24,25 @@ def create_raw_folders():
     if not os.path.exists("raw_data/after"):
         os.makedirs("raw_data/after")
 
-    if not os.path.exists("raw_data/after/superbowl"):
-        os.makedirs("raw_data/after/superbowl")
 
-#pulling twitter data
+
+
+# pulling twitter data
 def pull_twitter_data():
+    pbar = tqdm(
+        desc="Files Created", total=sum(len(years) for years in brands.values()) * 2
+    )
     for brand, years in brands.items():
         for year in years:
-            get_brand_tweets_in_year_before(brand, year) 
+            get_brand_tweets_in_year_before(brand, year)
+            pbar.update(1)
     for brand, years in brands.items():
         for year in years:
             get_brand_tweets_in_year_after(brand, year)
-    for brand, years in brands.items():
-        for year in years:
-            get_brand_tweets_in_year_after_sb(brand, year) 
+            pbar.update(1)
+    pbar.close()
 
 
-if __name__ == '__main__':
-    create_raw_folders()
-    pull_twitter_data()
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+   create_raw_folders()
+   pull_twitter_data()
