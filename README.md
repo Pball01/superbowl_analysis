@@ -1,4 +1,4 @@
-# Analysis of SuperBowl ads
+# Analyzing the Impact of Super Bowl Ads
 Project was voted as crowd favorite in DS4A Data Engineering Program
 
 Presentation: https://docs.google.com/presentation/d/1uhUTPxy9BeEHuxm45NDwZRVHj885gVk7kznR-KppkBw/edit?usp=sharing 
